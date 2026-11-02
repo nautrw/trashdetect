@@ -1,3 +1,5 @@
 .venv/
 runs/
 yolo26n.pt
+RealWaste/
+RealWaste-Split/

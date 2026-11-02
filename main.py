@@ -4,17 +4,17 @@ from ultralytics import YOLO
 camera = cv2.VideoCapture(0)
 
 yolo = YOLO("yolo26n.pt")
-# train_results = yolo.train(
-#     data="coco8.yaml",
-#     epochs=100,
-#     imgsz=640,
-#     device="cpu"
-# )
+train_results = yolo.train(
+    data="realwaste.yaml",
+    epochs=100,
+    imgsz=640,
+    device="cpu"
+)
 metrics = yolo.val()
 
 while True:
     ret, frame = camera.read()
-    results = yolo(frame, conf=0.5)
+    results = yolo(frame, conf=0.75)
 
     annotated_frame = next(iter(results)).plot()
 
