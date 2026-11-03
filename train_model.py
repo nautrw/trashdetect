@@ -1,19 +1,19 @@
-import cv2
 from ultralytics import YOLO
 
-yolo = YOLO("yolo26n.pt")
-train_results = yolo.train(
-    data="../datasets/GARBAGE CLASSIFICATION/data.yaml",
-    epochs=1,
-    imgsz=640,
-    device="cpu"
-)
-metrics = yolo.val()
+def main():
+    yolo = YOLO("yolo26n.pt")
+    yolo.train(
+        data="../datasets/GARBAGE CLASSIFICATION/data.yaml",
+        epochs=1,
+        imgsz=640,
+        # device="cpu",
+        device=0,
+        batch=16,
+        workers=4
+    )
 
-with open("metrics.txt", "w") as f:
-    f.write(metrics)
-    f.write(str(dir(metrics)))
+    path = yolo.export(format='onnx')
+    print(f"Model exported to {path}")
 
-with open("train_results.txt", "w") as f:
-    f.write(train_results)
-    f.write(str(dir(train_results)))
+if __name__ == "__main__":
+    main()
