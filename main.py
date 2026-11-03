@@ -3,14 +3,7 @@ from ultralytics import YOLO
 
 camera = cv2.VideoCapture(0)
 
-yolo = YOLO("yolo26n.pt")
-train_results = yolo.train(
-    data="realwaste.yaml",
-    epochs=100,
-    imgsz=640,
-    device="cpu"
-)
-metrics = yolo.val()
+yolo = YOLO("./runs/detect/train-9/weights/best.onnx")
 
 while True:
     ret, frame = camera.read()
