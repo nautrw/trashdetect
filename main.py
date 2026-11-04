@@ -3,7 +3,7 @@ from ultralytics import YOLO
 
 camera = cv2.VideoCapture(0)
 
-yolo = YOLO("./runs/detect/train-9/weights/best.onnx")
+yolo = YOLO("./runs/detect/train-11/weights/best.onnx")
 
 while True:
     ret, frame = camera.read()
