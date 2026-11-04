@@ -9,8 +9,8 @@ def main():
 
     yolo = YOLO("yolo26n.pt")
     yolo.train(
-        data="../datasets/GARBAGE CLASSIFICATION/data.yaml",
-        epochs=100,
+        data="./dataset.yaml",
+        epochs=50,
         imgsz=640,
         # device="cpu",
         device=0,

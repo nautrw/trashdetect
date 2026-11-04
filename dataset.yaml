@@ -1,0 +1,6 @@
+path: AnnotatedWasteDataset-Split
+train: train
+val: val
+
+nc: 7
+names: ['biological', 'cardboard', 'glass', 'metal', 'paper', 'plastic', 'trash']
