@@ -1,6 +1,7 @@
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.button import Button
+from datetime import datetime
 import cv2
 from kivy.app import App
 from kivy.clock import Clock
@@ -17,20 +18,31 @@ class CameraApp(App):
         self.paused = False
 
     def build(self):
-        self.layout = BoxLayout(orientation='vertical')
+        layout = BoxLayout(orientation='vertical')
+        buttons_layout = BoxLayout(orientation='horizontal', size_hint=(1,.25))
 
         self.image = Image()
-        self.layout.add_widget(self.image)
+        layout.add_widget(self.image)
         
         self.capture = cv2.VideoCapture(0)
 
-        self.pause_button = Button(text="Pause", font_size=14, size_hint=(1,.25))
-        self.pause_button.bind(on_press=self.toggle_pause_camera)
-        self.layout.add_widget(self.pause_button)
+        pause_button = Button(text="Pause", font_size=14)
+        pause_button.bind(on_press=self.toggle_pause_camera)
+        buttons_layout.add_widget(pause_button)
+
+        save_button = Button(text="Save To File", font_size=14)
+        save_button.bind(on_press=self.save_image)
+        buttons_layout.add_widget(save_button)
+
+        layout.add_widget(buttons_layout)
 
         Clock.schedule_interval(self.update, 1 / 30)
 
-        return self.layout
+        return layout
+
+    def save_image(self, *args, **kwargs):
+        timestamp_str = datetime.now().strftime("%Y-%m-%d %H-%M-%S")
+        self.image.export_to_png(f'TrashDetect Output {timestamp_str}.png')
     
     def toggle_pause_camera(self, *args, **kwargs):
         self.paused = not self.paused
@@ -42,9 +54,10 @@ class CameraApp(App):
 
             # frame must be converted to RGB because opencv defaults to BGR
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            prediction_results = model.predict(frame, conf=0.5, verbose=True) # Iterator[Results | Tensor] | list[Results] | list[Tensor]
-            # annotated_frame = prediction_results[0].plot() # ty:ignore[not-subscriptable, unresolved-attribute, unused-ignore-comment]
+            # prediction_results: Iterator[Results | Tensor] | list[Results] | list[Tensor]
+            prediction_results = model.predict(frame, conf=0.5, verbose=False) 
 
+            # annotated_frame = prediction_results[0].plot() # ty:ignore[not-subscriptable, unresolved-attribute, unused-ignore-comment]
             annotated_frame = next(iter(prediction_results)).plot()  # ty:ignore[unresolved-attribute]
 
             # frame.shape = (# rows (y), # columns (x), # color channels (3))
