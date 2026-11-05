@@ -1,4 +1,6 @@
 opencv-python
 ultralytics
 split-folders
-kivy
+kivy[base]
+onnxruntime
+Pillow
