@@ -1,3 +1,4 @@
+from kivy.core.window import Window
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.button import Button
@@ -18,6 +19,8 @@ class CameraApp(App):
         self.paused = False
 
     def build(self):
+        Window.bind(on_keyboard=self.on_keyboard)
+        
         layout = BoxLayout(orientation='vertical')
         buttons_layout = BoxLayout(orientation='horizontal', size_hint=(1,.25))
 
@@ -26,11 +29,11 @@ class CameraApp(App):
         
         self.capture = cv2.VideoCapture(0)
 
-        pause_button = Button(text="Pause", font_size=14)
+        pause_button = Button(text="Pause (space)", font_size=14)
         pause_button.bind(on_press=self.toggle_pause_camera)
         buttons_layout.add_widget(pause_button)
 
-        save_button = Button(text="Save To File", font_size=14)
+        save_button = Button(text="Save To File (s)", font_size=14)
         save_button.bind(on_press=self.save_image)
         buttons_layout.add_widget(save_button)
 
@@ -39,6 +42,15 @@ class CameraApp(App):
         Clock.schedule_interval(self.update, 1 / 30)
 
         return layout
+    
+    def on_keyboard(self,  window, key, scancode, codepoint, modifier):
+        # ord returns the unicode code of a character, key is the code too
+        if key == ord(' '):
+            self.toggle_pause_camera()
+        elif key == ord('s'):
+            self.save_image()
+        elif key == ord('q'):
+            self.stop()
 
     def save_image(self, *args, **kwargs):
         timestamp_str = datetime.now().strftime("%Y-%m-%d %H-%M-%S")
