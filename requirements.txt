@@ -4,3 +4,5 @@ split-folders
 kivy[base]
 onnxruntime
 Pillow
+pandas
+streamlit[charts]

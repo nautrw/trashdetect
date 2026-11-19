@@ -10,8 +10,7 @@ from kivy.graphics.texture import Texture  # ty:ignore[unresolved-import]
 from kivy.uix.image import Image
 from ultralytics import YOLO
 
-model = YOLO("./runs/detect/train-2/weights/best.onnx")
-
+model = YOLO("./runs/detect/train-4/weights/best.onnx")
 
 class CameraApp(App):
     def __init__(self):
@@ -67,7 +66,7 @@ class CameraApp(App):
             # frame must be converted to RGB because opencv defaults to BGR
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             # prediction_results: Iterator[Results | Tensor] | list[Results] | list[Tensor]
-            prediction_results = model.predict(frame, conf=0.5, verbose=False) 
+            prediction_results = model.predict(frame, conf=0.05, verbose=True) 
 
             # annotated_frame = prediction_results[0].plot() # ty:ignore[not-subscriptable, unresolved-attribute, unused-ignore-comment]
             annotated_frame = next(iter(prediction_results)).plot()  # ty:ignore[unresolved-attribute]

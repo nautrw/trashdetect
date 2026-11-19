@@ -9,11 +9,11 @@ def main():
 
     yolo = YOLO("yolo26n.pt")
     yolo.train(
-        data="./dataset.yaml",
+        data="../datasets/taco/data.yaml",
         epochs=50,
         imgsz=640,
-        # device="cpu",
-        device=0,
+        device="cpu",
+        # device=0,
         batch=16,
         workers=4,
     )
