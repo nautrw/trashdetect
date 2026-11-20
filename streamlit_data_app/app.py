@@ -1,3 +1,4 @@
+from ultralytics.models import YOLO
 from collections import Counter
 import streamlit as st
 import pandas as pd
@@ -104,6 +105,5 @@ with test_split_tab:
     fig = px.pie(test_split_df, names=test_split_df.Class, values=test_split_df.Total, title="Test Split Categories")
     st.plotly_chart(fig)
 
-# df = pd.DataFrame({"Classes": classes, "Values": values})
-# fig = px.pie(df, title="Classes and Values", names=classes, values=values)
-# st.plotly_chart(fig)
+model = YOLO(Path.cwd().parent / "runs" / "detect" / "train-4" / "weights" / "best.onnx")
+print(model.val(data=dataset_dir / "data.yaml"))
