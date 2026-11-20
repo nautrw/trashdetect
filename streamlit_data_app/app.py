@@ -1,4 +1,3 @@
-from unicodedata import category
 from collections import Counter
 import streamlit as st
 import pandas as pd
@@ -59,6 +58,7 @@ for split in classes_count:
         classes.append(list(names.values())[class_id])
 
 df = pd.DataFrame({"Class": classes, "Total": values, "Split": splits})
+
 class_order = (
     df.groupby("Class")["Total"]
     .sum()
@@ -86,6 +86,20 @@ fig.add_trace(
 )
 
 st.plotly_chart(fig)
+
+train_split, val_split, test_split = st.tabs(["Train", "Validation", "Testing"])
+with train_split:
+    train_split_df = df.where(df.Split == "train").dropna()
+    fig = px.pie(train_split_df, names=train_split_df.Class, values=train_split_df.Total, title="Train Split Categories")
+    st.plotly_chart(fig)
+with val_split:
+    val_split_df = df.where(df.Split == "val").dropna()
+    fig = px.pie(val_split_df, names=val_split_df.Class, values=val_split_df.Total, title="Validation Split Categories")
+    st.plotly_chart(fig)
+with test_split:
+    test_split_df = df.where(df.Split == "test").dropna()
+    fig = px.pie(test_split_df, names=test_split_df.Class, values=test_split_df.Total, title="Test Split Categories")
+    st.plotly_chart(fig)
 
 # df = pd.DataFrame({"Classes": classes, "Values": values})
 # fig = px.pie(df, title="Classes and Values", names=classes, values=values)
