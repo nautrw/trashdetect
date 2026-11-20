@@ -87,16 +87,19 @@ fig.add_trace(
 
 st.plotly_chart(fig)
 
-train_split, val_split, test_split = st.tabs(["Train", "Validation", "Testing"])
-with train_split:
+overall_split_tab, train_split_tab, val_split_tab, test_split_tab = st.tabs(["Total", "Train", "Validation", "Testing"])
+with overall_split_tab:
+    fig = px.pie(df, names=df.Class, values=df.Total, title="Overall Categories")
+    st.plotly_chart(fig)
+with train_split_tab:
     train_split_df = df.where(df.Split == "train").dropna()
     fig = px.pie(train_split_df, names=train_split_df.Class, values=train_split_df.Total, title="Train Split Categories")
     st.plotly_chart(fig)
-with val_split:
+with val_split_tab:
     val_split_df = df.where(df.Split == "val").dropna()
     fig = px.pie(val_split_df, names=val_split_df.Class, values=val_split_df.Total, title="Validation Split Categories")
     st.plotly_chart(fig)
-with test_split:
+with test_split_tab:
     test_split_df = df.where(df.Split == "test").dropna()
     fig = px.pie(test_split_df, names=test_split_df.Class, values=test_split_df.Total, title="Test Split Categories")
     st.plotly_chart(fig)
